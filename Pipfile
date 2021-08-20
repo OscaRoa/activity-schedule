@@ -6,9 +6,9 @@ name = "pypi"
 [packages]
 django = "~=2.2"
 djangorestframework = "*"
-psycopg2-binary = "*"
 flake8 = "*"
 python-dotenv = "*"
+psycopg2-binary = "==2.8.6"
 
 [dev-packages]
 
