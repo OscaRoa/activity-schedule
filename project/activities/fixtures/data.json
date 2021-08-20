@@ -1,0 +1,40 @@
+[
+    {
+        "model": "activities.property",
+        "pk": 1,
+        "fields": {
+            "title": "Property A",
+            "address": "Av. Insurgentes 3312 Col. San Angel C.P. 07641",
+            "description": "This is a description.",
+            "created_at": "2021-08-20T21:58:52.881Z",
+            "updated_at": "2021-08-20T21:58:52.881Z",
+            "disabled_at": null,
+            "status": "active"
+        }
+    }, 
+    {
+        "model": "activities.property",
+        "pk": 2,
+        "fields": {
+            "title": "Property B",
+            "address": "Av. Chapultepec 666 Col. San Miguel Chapultepec Primera Sección C.P. 12067",
+            "description": "This is another description.",
+            "created_at": "2021-08-20T22:00:46.239Z",
+            "updated_at": "2021-08-20T22:00:46.239Z",
+            "disabled_at": null,
+            "status": "inactive"
+        }
+    },
+    {
+        "model": "activities.activity",
+        "pk": 1,
+        "fields": {
+            "property": 1,
+            "schedule": "2021-09-02T05:00:00Z",
+            "title": "Cumpleaños",
+            "created_at": "2021-08-20T22:05:25.628Z",
+            "updated_at": "2021-08-20T22:05:25.628Z",
+            "status": "active"
+        }
+    }
+]
