@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from rest_framework import routers
-from activities.views import ActivityViewSet
+from apps.activities.views import ActivityViewSet
 
 
 router = routers.DefaultRouter()
