@@ -26,6 +26,19 @@
         }
     },
     {
+        "model": "properties.property",
+        "pk": 3,
+        "fields": {
+            "title": "Property C",
+            "address": "Calzada de Tlalpan 1 Col. Portales C.P. 13604",
+            "description": "This is yet another description.",
+            "created_at": "2021-08-20T22:00:46.239Z",
+            "updated_at": "2021-08-20T22:00:46.239Z",
+            "disabled_at": null,
+            "status": "inactive"
+        }
+    },
+    {
         "model": "activities.activity",
         "pk": 1,
         "fields": {
