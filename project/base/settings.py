@@ -25,7 +25,8 @@ DJANGO_APPS = (
 )
 
 LOCAL_APPS = (
-    'activities.apps.ActivitiesConfig',
+    'apps.activities',
+    'apps.properties'
 )
 
 THIRD_PARTY_APPS = (
@@ -43,7 +44,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'activity_schedule.urls'
+ROOT_URLCONF = 'base.urls'
 
 TEMPLATES = [
     {
@@ -61,7 +62,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'activity_schedule.wsgi.application'
+WSGI_APPLICATION = 'base.wsgi.application'
 
 
 # Database
