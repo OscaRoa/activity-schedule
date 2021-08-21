@@ -1,6 +1,6 @@
 [
     {
-        "model": "activities.property",
+        "model": "properties.property",
         "pk": 1,
         "fields": {
             "title": "Property A",
@@ -13,7 +13,7 @@
         }
     }, 
     {
-        "model": "activities.property",
+        "model": "properties.property",
         "pk": 2,
         "fields": {
             "title": "Property B",
