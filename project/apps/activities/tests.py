@@ -1,5 +1,6 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 from django.urls import reverse
+from django.utils import timezone
 from rest_framework import status
 from rest_framework.test import APITestCase
 from apps.activities.models import Activity
@@ -41,6 +42,7 @@ class ActivityTests(APITestCase):
         self.enabled_property = Property.objects.get(pk=1)
         self.disabled_property = Property.objects.get(pk=2)
         self.other_property = Property.objects.get(pk=3)
+        self.now = timezone.now()
         return super().setUp()
 
     def test_root(self) -> None:
@@ -57,7 +59,7 @@ class ActivityTests(APITestCase):
         url = reverse('activity-list')
         data = {
             "property": self.disabled_property.pk,
-            "schedule": datetime.now() + timedelta(days=3),
+            "schedule": self.now + timedelta(days=3),
             "title": "An activity",
             "status": Activity.ACTIVE
         }
@@ -156,11 +158,35 @@ class ActivityTests(APITestCase):
         self.assertTrue(status.is_success(response.status_code))
 
     def test_list_activities(self):
-        """Test listing all the activities.
+        """Test listing activities with the default filter.
         """
-        activities = Activity.objects.all()
+        Activity.objects.bulk_create([
+            Activity(
+                property=self.enabled_property,
+                title="An activity",
+                schedule=self.now + timedelta(days=15)
+            ),
+            Activity(
+                property=self.enabled_property,
+                title="Another activity",
+                schedule=self.now + timedelta(weeks=2)
+            ),
+            Activity(
+                property=self.enabled_property,
+                title="An activity in the past",
+                schedule=self.now - timedelta(days=2)
+            ),
+            Activity(
+                property=self.enabled_property,
+                title="Another activity in the past",
+                schedule=self.now - timedelta(days=4)
+            )
+        ])
+        activities = Activity.objects.filter(
+            schedule__range=[self.now-timedelta(days=3), self.now+timedelta(days=14)]
+        )
         serialized = ListActivitySerializer(activities, many=True)
         url = reverse('activity-list')
         response = self.client.get(url)
-        self.assertEqual(response.data, serialized.data)
+        self.assertEqual(len(serialized.data), len(response.data))
         self.assertTrue(status.is_success(response.status_code))

@@ -1,3 +1,5 @@
+from datetime import timedelta
+from django.utils import timezone
 from rest_framework.response import Response
 from .models import Activity
 from rest_framework import viewsets
@@ -21,6 +23,14 @@ class ActivityViewSet(viewsets.ModelViewSet):
         'partial_update': RescheduleActivitySerializer,
         'cancel': CancelActivitySerializer
     }
+
+    def get_queryset(self):
+        if self.action == 'list':
+            now = timezone.now()
+            return Activity.objects.filter(
+                schedule__range=[now - timedelta(days=3), now + timedelta(days=14)]
+            )
+        return self.queryset
 
     def get_serializer_class(self):
         # Check if attribute exists, then get the proper serializer based on the action
