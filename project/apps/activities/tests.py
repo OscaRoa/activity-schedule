@@ -51,7 +51,7 @@ class ActivityTests(APITestCase):
         url = reverse('api-root')
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 1)
+        self.assertEqual(len(response.data), 2)
 
     def test_activity_creation_disabled_property(self):
         """Test the creation of an activity with a disabled property.

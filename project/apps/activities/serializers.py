@@ -3,7 +3,7 @@ from datetime import timedelta
 from django.utils import timezone
 from apps.properties.models import Property
 from apps.properties.serializers import PropertySerializer
-from .models import Activity
+from .models import Activity, Survey
 from rest_framework import serializers
 
 
@@ -42,6 +42,11 @@ class CreateActivitySerializer(serializers.ModelSerializer):
 class ListActivitySerializer(serializers.ModelSerializer):
     property = PropertySerializer(read_only=True)
     condition = serializers.SerializerMethodField()
+    survey = serializers.HyperlinkedRelatedField(
+        many=False,
+        read_only=True,
+        view_name='survey-detail'
+    )
 
     class Meta:
         model = Activity
@@ -52,7 +57,8 @@ class ListActivitySerializer(serializers.ModelSerializer):
             'created_at',
             'status',
             'property',
-            'condition'
+            'condition',
+            'survey'
         ]
 
     def get_condition(self, obj):
@@ -99,3 +105,9 @@ class RescheduleActivitySerializer(BaseUpdateActivitySerializer):
         if self.instance.status == Activity.CANCELED:
             raise serializers.ValidationError("Can't reschedule canceled activity.")
         return schedule
+
+
+class SurveySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Survey
+        fields = '__all__'

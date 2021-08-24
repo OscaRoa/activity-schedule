@@ -3,7 +3,7 @@ from django.utils import timezone
 from django_filters import rest_framework as filters
 from rest_framework.response import Response
 from rest_framework.filters import OrderingFilter
-from .models import Activity
+from .models import Activity, Survey
 from .filter_classes import ActivityFilter
 from rest_framework import viewsets
 from rest_framework.decorators import action
@@ -11,7 +11,8 @@ from .serializers import (
     CancelActivitySerializer,
     CreateActivitySerializer,
     ListActivitySerializer,
-    RescheduleActivitySerializer
+    RescheduleActivitySerializer,
+    SurveySerializer
 )
 
 
@@ -52,3 +53,8 @@ class ActivityViewSet(viewsets.ModelViewSet):
         serializer.save()
         response_data = self.serializer_class(activity).data
         return Response(data=response_data)
+
+
+class RetrieveSurvey(viewsets.ReadOnlyModelViewSet):
+    queryset = Survey.objects.all()
+    serializer_class = SurveySerializer
