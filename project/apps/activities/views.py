@@ -1,6 +1,7 @@
 from datetime import timedelta
 from django.utils import timezone
 from rest_framework.response import Response
+from rest_framework.filters import OrderingFilter
 from .models import Activity
 from rest_framework import viewsets
 from rest_framework.decorators import action
@@ -23,6 +24,8 @@ class ActivityViewSet(viewsets.ModelViewSet):
         'partial_update': RescheduleActivitySerializer,
         'cancel': CancelActivitySerializer
     }
+    filter_backends = [OrderingFilter]
+    ordering_fields = ['status', 'schedule']
 
     def get_queryset(self):
         if self.action == 'list':
@@ -30,7 +33,7 @@ class ActivityViewSet(viewsets.ModelViewSet):
             return Activity.objects.filter(
                 schedule__range=[now - timedelta(days=3), now + timedelta(days=14)]
             )
-        return self.queryset
+        return super().get_queryset()
 
     def get_serializer_class(self):
         # Check if attribute exists, then get the proper serializer based on the action

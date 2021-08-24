@@ -60,12 +60,15 @@ class ListActivitySerializer(serializers.ModelSerializer):
         PENDING = "Pendiente a realizar"
         DELAYED = "Atrasada"
         FINISHED = "Finalizada"
+        CANCELED = "Cancelada"
         if obj.status == obj.ACTIVE and obj.schedule >= now:
             return PENDING
         elif obj.status == obj.ACTIVE and obj.schedule <= now:
             return DELAYED
         elif obj.status == obj.COMPLETED:
             return FINISHED
+        else:
+            return CANCELED
 
 
 class BaseUpdateActivitySerializer(serializers.ModelSerializer):
