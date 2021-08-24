@@ -1,8 +1,10 @@
 from datetime import timedelta
 from django.utils import timezone
+from django_filters import rest_framework as filters
 from rest_framework.response import Response
 from rest_framework.filters import OrderingFilter
 from .models import Activity
+from .filter_classes import ActivityFilter
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from .serializers import (
@@ -24,11 +26,12 @@ class ActivityViewSet(viewsets.ModelViewSet):
         'partial_update': RescheduleActivitySerializer,
         'cancel': CancelActivitySerializer
     }
-    filter_backends = [OrderingFilter]
+    filter_backends = [filters.DjangoFilterBackend, OrderingFilter, ]
+    filterset_class = ActivityFilter
     ordering_fields = ['status', 'schedule']
 
     def get_queryset(self):
-        if self.action == 'list':
+        if self.action == 'list' and len(self.request.query_params) == 0:
             now = timezone.now()
             return Activity.objects.filter(
                 schedule__range=[now - timedelta(days=3), now + timedelta(days=14)]
