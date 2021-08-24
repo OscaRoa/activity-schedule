@@ -1,9 +1,11 @@
 from datetime import timedelta
+from apps.properties.models import Property
+from apps.properties.serializers import PropertySerializer
 from .models import Activity
 from rest_framework import serializers
 
 
-class ActivitySerializer(serializers.ModelSerializer):
+class CreateActivitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Activity
         fields = '__all__'
@@ -14,7 +16,7 @@ class ActivitySerializer(serializers.ModelSerializer):
         Args:
             property (Property): A property object
         """
-        if property.status == "d":
+        if property.status == Property.DISABLED:
             raise serializers.ValidationError("Can't assign disabled property to activity.")
         return property
 
@@ -33,3 +35,45 @@ class ActivitySerializer(serializers.ModelSerializer):
         except KeyError:
             pass
         return data
+
+
+class ListActivitySerializer(serializers.ModelSerializer):
+    property = PropertySerializer(read_only=True)
+
+    class Meta:
+        model = Activity
+        fields = [
+            'id',
+            'schedule',
+            'title',
+            'created_at',
+            'status',
+            'property',
+        ]
+
+
+class BaseUpdateActivitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Activity
+
+    def validate(self, data):
+        if hasattr(self, 'initial_data'):
+            unknown_keys = set(self.initial_data.keys()) - set(self.fields.keys())
+            if unknown_keys:
+                raise serializers.ValidationError("Got unknown fields: {}".format(unknown_keys))
+        return data
+
+
+class CancelActivitySerializer(BaseUpdateActivitySerializer):
+    class Meta(BaseUpdateActivitySerializer.Meta):
+        fields = ['status']
+
+
+class RescheduleActivitySerializer(BaseUpdateActivitySerializer):
+    class Meta(BaseUpdateActivitySerializer.Meta):
+        fields = ['schedule']
+
+    def validate_schedule(self, schedule):
+        if self.instance.status == Activity.CANCELED:
+            raise serializers.ValidationError("Can't reschedule canceled activity.")
+        return schedule

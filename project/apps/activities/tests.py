@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from apps.activities.models import Activity
 from apps.properties.models import Property
-from apps.activities.serializers import ActivitySerializer
+from apps.activities.serializers import CreateActivitySerializer, ListActivitySerializer
 
 
 class ActivityTests(APITestCase):
@@ -59,7 +59,7 @@ class ActivityTests(APITestCase):
             "property": self.disabled_property.pk,
             "schedule": datetime.now() + timedelta(days=3),
             "title": "An activity",
-            "status": "a"
+            "status": Activity.ACTIVE
         }
         response = self.client.post(url, data)
         self.assertTrue(status.is_client_error(response.status_code))
@@ -74,7 +74,7 @@ class ActivityTests(APITestCase):
             "property": self.scheduled_activity.property.id,
             "schedule": self.scheduled_activity.schedule,
             "title": "An activity",
-            "status": "a"
+            "status": Activity.ACTIVE
         }
         response = self.client.post(url, data)
         self.assertTrue(status.is_client_error(response.status_code))
@@ -93,7 +93,7 @@ class ActivityTests(APITestCase):
             "property": self.scheduled_activity.property.id,
             "schedule": self.scheduled_activity.schedule + timedelta(minutes=59),
             "title": "An activity",
-            "status": "a"
+            "status": Activity.ACTIVE
         }
         response = self.client.post(url, data)
         self.assertTrue(status.is_client_error(response.status_code))
@@ -107,7 +107,7 @@ class ActivityTests(APITestCase):
             "property": self.scheduled_activity.property.id,
             "schedule": self.scheduled_activity.schedule + timedelta(minutes=60),
             "title": "An activity",
-            "status": "a"
+            "status": Activity.ACTIVE
         }
         response = self.client.post(url, data)
         self.assertTrue(status.is_success(response.status_code))
@@ -136,7 +136,7 @@ class ActivityTests(APITestCase):
     def test_update_canceled_activity(self):
         """Test updating a property with the canceled status.
         """
-        self.scheduled_activity.status = 'c'
+        self.scheduled_activity.status = Activity.CANCELED
         self.scheduled_activity.save()
         url = reverse('activity-detail', args=[self.scheduled_activity.id])
         data = {
@@ -148,9 +148,9 @@ class ActivityTests(APITestCase):
     def test_cancel_activity(self):
         """Test updating the activity status to canceled.
         """
-        url = reverse('activity-detail', args=[self.scheduled_activity.id])
+        url = reverse('activity-cancel', args=[self.scheduled_activity.id])
         data = {
-            "status": "c"
+            "status": Activity.CANCELED
         }
         response = self.client.patch(url, data)
         self.assertTrue(status.is_success(response.status_code))
@@ -159,7 +159,7 @@ class ActivityTests(APITestCase):
         """Test listing all the activities.
         """
         activities = Activity.objects.all()
-        serialized = ActivitySerializer(activities, many=True)
+        serialized = ListActivitySerializer(activities, many=True)
         url = reverse('activity-list')
         response = self.client.get(url)
         self.assertEqual(response.data, serialized.data)
