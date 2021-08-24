@@ -1,4 +1,6 @@
 from datetime import timedelta
+
+from django.utils import timezone
 from apps.properties.models import Property
 from apps.properties.serializers import PropertySerializer
 from .models import Activity
@@ -39,6 +41,7 @@ class CreateActivitySerializer(serializers.ModelSerializer):
 
 class ListActivitySerializer(serializers.ModelSerializer):
     property = PropertySerializer(read_only=True)
+    condition = serializers.SerializerMethodField()
 
     class Meta:
         model = Activity
@@ -49,7 +52,20 @@ class ListActivitySerializer(serializers.ModelSerializer):
             'created_at',
             'status',
             'property',
+            'condition'
         ]
+
+    def get_condition(self, obj):
+        now = timezone.now()
+        PENDING = "Pendiente a realizar"
+        DELAYED = "Atrasada"
+        FINISHED = "Finalizada"
+        if obj.status == obj.ACTIVE and obj.schedule >= now:
+            return PENDING
+        elif obj.status == obj.ACTIVE and obj.schedule <= now:
+            return DELAYED
+        elif obj.status == obj.COMPLETED:
+            return FINISHED
 
 
 class BaseUpdateActivitySerializer(serializers.ModelSerializer):
