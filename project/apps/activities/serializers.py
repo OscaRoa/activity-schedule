@@ -53,6 +53,9 @@ class ListActivitySerializer(serializers.ModelSerializer):
 
 
 class BaseUpdateActivitySerializer(serializers.ModelSerializer):
+    """Custom serializer lass. Raises ValidationError if an unkown
+    field was sent in the request body.
+    """
     class Meta:
         model = Activity
 
