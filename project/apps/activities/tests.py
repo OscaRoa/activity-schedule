@@ -99,6 +99,20 @@ class ActivityTests(APITestCase):
         self.assertTrue(status.is_client_error(response.status_code))
         self.assertEqual(Activity.objects.count(), 1)
 
+    def test_activity_creation(self):
+        """Test the creation of an activity successfully.
+        """
+        url = reverse('activity-list')
+        data = {
+            "property": self.scheduled_activity.property.id,
+            "schedule": self.scheduled_activity.schedule + timedelta(minutes=60),
+            "title": "An activity",
+            "status": "a"
+        }
+        response = self.client.post(url, data)
+        self.assertTrue(status.is_success(response.status_code))
+        self.assertEqual(Activity.objects.count(), 2)
+
     def test_update_activity_property(self):
         """Test updating the property of an existing activity.
         """

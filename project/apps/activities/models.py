@@ -30,6 +30,9 @@ class Activity(CreateUpdatedBaseModel):
         default=ACTIVE
     )
 
+    class Meta:
+        unique_together = ['property', 'schedule']
+
 
 class Survey(CreatedBaseModel):
     activity = models.OneToOneField(

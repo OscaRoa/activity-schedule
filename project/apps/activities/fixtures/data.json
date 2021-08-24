@@ -9,7 +9,7 @@
             "created_at": "2021-08-20T21:58:52.881Z",
             "updated_at": "2021-08-20T21:58:52.881Z",
             "disabled_at": null,
-            "status": "active"
+            "status": "e"
         }
     }, 
     {
@@ -22,7 +22,7 @@
             "created_at": "2021-08-20T22:00:46.239Z",
             "updated_at": "2021-08-20T22:00:46.239Z",
             "disabled_at": null,
-            "status": "inactive"
+            "status": "d"
         }
     },
     {
@@ -35,7 +35,7 @@
             "created_at": "2021-08-20T22:00:46.239Z",
             "updated_at": "2021-08-20T22:00:46.239Z",
             "disabled_at": null,
-            "status": "inactive"
+            "status": "e"
         }
     },
     {
@@ -47,7 +47,7 @@
             "title": "Cumpleaños",
             "created_at": "2021-08-20T22:05:25.628Z",
             "updated_at": "2021-08-20T22:05:25.628Z",
-            "status": "active"
+            "status": "a"
         }
     }
 ]
