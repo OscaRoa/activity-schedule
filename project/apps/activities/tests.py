@@ -35,7 +35,7 @@ class ActivityTests(APITestCase):
             id, schedule, title, created_at, status and the ones above.
     """
 
-    fixtures = ["data"]
+    fixtures = ["test_data"]
 
     def setUp(self) -> None:
         self.scheduled_activity = Activity.objects.get(pk=1)
