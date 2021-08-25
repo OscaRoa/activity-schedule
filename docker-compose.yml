@@ -1,24 +1,30 @@
-version: "3"
+version: "3.9"
 services:
   web:
-    build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    build:
+      context: .
+    command: >
+      sh -c "python manage.py wait_for_db &&
+                python manage.py migrate &&
+                python manage.py runserver 0.0.0.0:8000"
     volumes:
-      - ./project/:/usr/src/app/
+      - ./project/:/app/
+      - ./project/data/web:/vol/web
     ports:
       - 8000:8000
-    env_file:
-      - .env
+    environment:
+      - SECRET_KEY=dev_key
+      - DEBUG=1
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=devdb
+      - DB_USER=devuser
+      - DB_PASSWORD=changeme
     depends_on:
       - db
   db:
-    image: postgres
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
+    image: postgres:13-alpine
     environment:
-      - POSTGRES_USER=myuser
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=activity_schedule
-
-volumes:
-  postgres_data:
+      - POSTGRES_DB=devdb
+      - POSTGRES_USER=devuser
+      - POSTGRES_PASSWORD=changeme

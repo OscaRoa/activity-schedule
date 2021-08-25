@@ -133,3 +133,6 @@ dmypy.json
 
 # VSCode config dir
 .vscode/
+
+# static files
+/data
