@@ -51,8 +51,7 @@ class ActivityViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(activity, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        response_data = self.serializer_class(activity).data
-        return Response(data=response_data)
+        return Response(data=serializer.data)
 
 
 class RetrieveSurvey(viewsets.ReadOnlyModelViewSet):
