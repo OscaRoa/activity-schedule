@@ -15,8 +15,8 @@ RUN pip install --upgrade pip
 RUN pip install pipenv
 RUN pipenv install --system --deploy
 
-COPY point.sh ./
-RUN chmod +x ./point.sh
+COPY entrypoint.sh ./
+RUN chmod +x ./entrypoint.sh
 
 COPY . ./
 RUN ls /usr/src/app
