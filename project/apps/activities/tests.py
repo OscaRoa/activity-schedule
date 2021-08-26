@@ -135,6 +135,22 @@ class ActivityTests(APITestCase):
         response = self.client.patch(url, data)
         self.assertTrue(status.is_success(response.status_code))
 
+    def test_update_activity_schedule_colition(self):
+        """Test colition of an scheduled activity.
+        """
+        schedule_colition = self.now + timedelta(minutes=30)
+        Activity.objects.create(
+            property=self.enabled_property,
+            schedule=schedule_colition,
+            title="Activity colition"
+        )
+        url = reverse('activity-detail', args=[self.scheduled_activity.id])
+        data = {
+            "schedule": schedule_colition
+        }
+        response = self.client.patch(url, data)
+        self.assertTrue(status.is_client_error(response.status_code))
+
     def test_update_canceled_activity(self):
         """Test updating a property with the canceled status.
         """

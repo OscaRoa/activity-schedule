@@ -104,6 +104,16 @@ class RescheduleActivitySerializer(BaseUpdateActivitySerializer):
     def validate_schedule(self, schedule):
         if self.instance.status == Activity.CANCELED:
             raise serializers.ValidationError("Can't reschedule canceled activity.")
+        if self.instance.schedule == schedule:
+            pass
+        elif Activity.objects.filter(  # Catch schedule colition
+                property=self.instance.property,
+                schedule__range=[
+                    schedule - timedelta(minutes=59),
+                    schedule + timedelta(minutes=59)
+                ]
+            ).exists():
+            raise serializers.ValidationError("Schedule already in use.")
         return schedule
 
 
