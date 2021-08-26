@@ -18,6 +18,7 @@ from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework import routers
+from rest_framework.schemas import get_schema_view
 from apps.activities.views import ActivityViewSet, RetrieveSurvey
 
 
@@ -28,7 +29,11 @@ router.register(r'surveys', viewset=RetrieveSurvey)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('admin/', admin.site.urls)
+    path('admin/', admin.site.urls),
+    path('openapi', get_schema_view(  # OpenAPI Schema generator
+        title="TrueHome Backend Test",
+        version="1.0"
+    ), name='openapi-schema')
 ]
 
 if settings.DEBUG:

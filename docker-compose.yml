@@ -14,7 +14,7 @@ services:
       - 8000:8000
     environment:
       - SECRET_KEY=dev_key
-      - DEBUG=1
+      - DJANGO_DEBUG=1
       - DB_HOST=db
       - DB_PORT=5432
       - DB_NAME=devdb

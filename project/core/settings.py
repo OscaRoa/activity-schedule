@@ -1,15 +1,15 @@
 import os
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 
 
-load_dotenv()
+# load_dotenv()
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = os.environ['SECRET_KEY']
 
-DEBUG = bool(int(os.getenv('DJANGO_DEBUG', 0)))
+DEBUG = os.getenv('DJANGO_DEBUG', 0)
 
 ALLOWED_HOSTS = []
 ALLOWED_HOSTS.extend(
